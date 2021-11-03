@@ -54,3 +54,5 @@ sonar-project.properties
 # STS
 .factorypath
 *.zip
+*.py
+pom.*.xml
