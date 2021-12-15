@@ -221,6 +221,12 @@ public class WxCpXmlMessage implements Serializable {
   private Long[] departments;
 
   /**
+   * 主部门
+   */
+  @XStreamAlias("MainDepartment")
+  private Long mainDepartment;
+
+  /**
    * 手机号码.
    */
   @XStreamAlias("Mobile")
@@ -457,7 +463,7 @@ public class WxCpXmlMessage implements Serializable {
   public static WxCpXmlMessage fromEncryptedXml(String encryptedXml, WxCpConfigStorage wxCpConfigStorage,
                                                 String timestamp, String nonce, String msgSignature) {
     WxCpCryptUtil cryptUtil = new WxCpCryptUtil(wxCpConfigStorage);
-    String plainText = cryptUtil.decrypt(msgSignature, timestamp, nonce, encryptedXml);
+    String plainText = cryptUtil.decryptXml(msgSignature, timestamp, nonce, encryptedXml);
     log.debug("解密后的原始xml消息内容：{}", plainText);
     return fromXml(plainText);
   }
@@ -533,7 +539,7 @@ public class WxCpXmlMessage implements Serializable {
     @Data
     public static class Item implements Serializable {
       private static final long serialVersionUID = -6549728838848064881L;
-      
+
       @XStreamAlias("PicMd5Sum")
       @XStreamConverter(value = XStreamCDataConverter.class)
       private String picMd5Sum;
