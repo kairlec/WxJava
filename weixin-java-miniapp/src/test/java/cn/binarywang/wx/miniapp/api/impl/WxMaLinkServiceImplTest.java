@@ -3,6 +3,8 @@ package cn.binarywang.wx.miniapp.api.impl;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.shortlink.GenerateShortLinkRequest;
 import cn.binarywang.wx.miniapp.bean.urllink.GenerateUrlLinkRequest;
+import cn.binarywang.wx.miniapp.bean.urllink.QueryUrlLinkRequest;
+import cn.binarywang.wx.miniapp.bean.urllink.UrlLinkInfoResult;
 import cn.binarywang.wx.miniapp.test.ApiTestModule;
 import com.google.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
@@ -48,5 +50,19 @@ public class WxMaLinkServiceImplTest {
       .envVersion("trial")
       .build());
     log.info("generate url link = {}", url);
+  }
+
+  /**
+   * 多版本链接生成测试
+   * 开发时,仅支持IOS设备打开体验版及开发版
+   */
+  @Test
+  public void testQueryUrlLink() throws WxErrorException {
+    UrlLinkInfoResult urlLinkInfoResult =
+      this.wxMaService.getLinkService().queryLink(QueryUrlLinkRequest.builder()
+        //todo 要指定测试路径名，没空还是不写了，但是不写真得很对不起，但是浪费时间写这个得我也很棒棒哦
+        .urlLink("todo")
+        .build());
+    log.info("generate url link = {}", urlLinkInfoResult);
   }
 }

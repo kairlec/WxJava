@@ -93,12 +93,4 @@ public class GenerateUrlLinkRequest implements Serializable {
    */
   @SerializedName("cloud_base")
   private CloudBase cloudBase;
-  /**
-   * 要打开的小程序版本。正式版为"release"，体验版为"trial"，开发版为"develop"，仅在微信外打开时生效。(默认release)
-   * <pre>
-   * 是否必填： 否
-   * </pre>
-   */
-  @SerializedName("env_version")
-  private String envVersion;
 }
