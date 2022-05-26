@@ -110,7 +110,8 @@ public class EcommerceServiceImpl implements EcommerceService {
   @Override
   public <T> T partnerTransactions(TradeTypeEnum tradeType, PartnerTransactionsRequest request) throws WxPayException {
     TransactionsResult result = this.partner(tradeType, request);
-    return result.getPayInfo(tradeType, request.getSpAppid(),
+    String appId = request.getSubAppid() != null ? request.getSubAppid() : request.getSpAppid();
+    return result.getPayInfo(tradeType, appId,
       request.getSpMchid(), payService.getConfig().getPrivateKey());
   }
 
@@ -197,6 +198,14 @@ public class EcommerceServiceImpl implements EcommerceService {
       this.payService.getPayBaseUrl(), request.getSubMchid(), request.getTransactionId(), request.getOutOrderNo());
     String response = this.payService.getV3(url);
     return GSON.fromJson(response, ProfitSharingResult.class);
+  }
+
+  @Override
+  public ProfitSharingOrdersUnSplitAmountResult queryProfitSharingOrdersUnsplitAmount(ProfitSharingOrdersUnSplitAmountRequest request) throws WxPayException {
+    String url = String.format("%s/v3/ecommerce/profitsharing/orders/%s/amounts",
+      this.payService.getPayBaseUrl(), request.getTransactionId());
+    String response = this.payService.getV3(url);
+    return GSON.fromJson(response, ProfitSharingOrdersUnSplitAmountResult.class);
   }
 
   @Override
