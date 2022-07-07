@@ -25,7 +25,7 @@ import static me.chanjar.weixin.cp.constant.WxCpConsts.GroupRobotMsgType.*;
 @Data
 public class WxCpGroupRobotMessage implements Serializable {
   private static final long serialVersionUID = -4301684507150486556L;
-  
+
   /**
    * 消息类型
    */
@@ -56,6 +56,11 @@ public class WxCpGroupRobotMessage implements Serializable {
    * 图文消息，一个图文消息支持1到8条图文
    */
   private List<NewArticle> articles;
+
+  /**
+   * 文件id
+   */
+  private String mediaId;
 
   public String toJson() {
     JsonObject messageJson = new JsonObject();
@@ -110,6 +115,12 @@ public class WxCpGroupRobotMessage implements Serializable {
         }
         text.add("articles", array);
         messageJson.add("news", text);
+        break;
+      }
+      case FILE: {
+        JsonObject file = new JsonObject();
+        file.addProperty("media_id", this.getMediaId());
+        messageJson.add("file", file);
         break;
       }
       default:

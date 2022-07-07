@@ -38,6 +38,14 @@ public class WxCpProperties {
    * 微信企业号应用 EncodingAESKey
    */
   private String aesKey;
+  /**
+   * 微信企业号应用 会话存档私钥
+   */
+  private String msgAuditPriKey;
+  /**
+   * 微信企业号应用 会话存档类库路径
+   */
+  private String msgAuditLibPath;
 
   /**
    * 配置存储策略，默认内存

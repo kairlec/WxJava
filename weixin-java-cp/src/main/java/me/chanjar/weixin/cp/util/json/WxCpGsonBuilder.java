@@ -9,6 +9,9 @@ import me.chanjar.weixin.cp.bean.WxCpChat;
 import me.chanjar.weixin.cp.bean.WxCpDepart;
 import me.chanjar.weixin.cp.bean.WxCpTag;
 import me.chanjar.weixin.cp.bean.WxCpUser;
+import me.chanjar.weixin.cp.bean.kf.WxCpKfGetCorpStatisticResp;
+
+import java.util.Objects;
 
 /**
  * @author Daniel Qian
@@ -16,6 +19,7 @@ import me.chanjar.weixin.cp.bean.WxCpUser;
 public class WxCpGsonBuilder {
 
   private static final GsonBuilder INSTANCE = new GsonBuilder();
+  private static volatile Gson GSON_INSTANCE;
 
   static {
     INSTANCE.disableHtmlEscaping();
@@ -25,10 +29,18 @@ public class WxCpGsonBuilder {
     INSTANCE.registerTypeAdapter(WxError.class, new WxErrorAdapter());
     INSTANCE.registerTypeAdapter(WxMenu.class, new WxCpMenuGsonAdapter());
     INSTANCE.registerTypeAdapter(WxCpTag.class, new WxCpTagGsonAdapter());
+    INSTANCE.registerTypeAdapter(WxCpKfGetCorpStatisticResp.StatisticList.class, new StatisticListAdapter());
   }
 
   public static Gson create() {
-    return INSTANCE.create();
+    if (Objects.isNull(GSON_INSTANCE)) {
+      synchronized (INSTANCE) {
+        if (Objects.isNull(GSON_INSTANCE)) {
+          GSON_INSTANCE = INSTANCE.create();
+        }
+      }
+    }
+    return GSON_INSTANCE;
   }
 
 }

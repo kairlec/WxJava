@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * 应用的管理员
+ *
  * @author huangxiaoming
  */
 @Data
@@ -29,6 +30,9 @@ public class WxCpTpAdmin extends WxCpBaseResp {
 
     @SerializedName("userid")
     private String userId;
+    
+    @SerializedName("open_userid")
+    private String openUserId;
 
     @SerializedName("auth_type")
     private Integer authType;
