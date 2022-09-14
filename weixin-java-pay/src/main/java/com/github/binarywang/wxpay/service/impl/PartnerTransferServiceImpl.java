@@ -21,7 +21,7 @@ import java.io.InputStream;
  * 批量转账到零钱（服务商）
  *
  * @author xiaoqiang
- * @date 2021-12-06
+ * created on  2021-12-06
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -78,7 +78,7 @@ public class PartnerTransferServiceImpl implements PartnerTransferService {
     if (request.getLimit() == null || request.getLimit() <= 0) {
       request.setLimit(20);
     }
-    String query = String.format("?need_query_detail=true&detail_status=ALL&offset=%s&limit=%s", request.getNeedQueryDetail(), request.getOffset(), request.getLimit());
+    String query = String.format("?need_query_detail=%s&detail_status=ALL&offset=%s&limit=%s", request.getNeedQueryDetail(), request.getOffset(), request.getLimit());
     if (StringUtil.isNotBlank(request.getDetailStatus())){
       query += "&detail_status="+request.getDetailStatus();
     }
@@ -107,7 +107,7 @@ public class PartnerTransferServiceImpl implements PartnerTransferService {
     if (request.getLimit() == null || request.getLimit() <= 0) {
       request.setLimit(20);
     }
-    String query = String.format("?need_query_detail=true&offset=%s&limit=%s", request.getNeedQueryDetail(), request.getOffset(), request.getLimit());
+    String query = String.format("?need_query_detail=%s&offset=%s&limit=%s", request.getNeedQueryDetail(), request.getOffset(), request.getLimit());
     if (StringUtil.isNotBlank(request.getDetailStatus())){
       query += "&detail_status="+request.getDetailStatus();
     }

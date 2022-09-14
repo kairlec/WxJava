@@ -14,7 +14,7 @@ import java.util.List;
  * 发起商家转账API参数
  *
  * @author zhongjun
- * @date 2022/6/17
+ * created on  2022/6/17
  **/
 @Data
 @Builder(builderMethodName = "newBuilder")
@@ -62,6 +62,7 @@ public class TransferBatchesRequest implements Serializable {
   /**
    * 转账明细列表
    */
+  @SpecEncrypt
   @SerializedName("transfer_detail_list")
   private List<TransferDetail> transferDetailList;
 

@@ -47,11 +47,20 @@ public class WxCpTpPermanentCodeInfo extends WxCpBaseResp {
   private AuthUserInfo authUserInfo;
 
   /**
+   * 推广二维码安装相关信息
+   */
+  @SerializedName("register_code_info")
+  private RegisterCodeInfo registerCodeInfo;
+
+  /**
    * 企业当前生效的版本信息
    */
   @SerializedName("edition_info")
   private EditionInfo editionInfo;
 
+  /**
+   * The type Auth corp info.
+   */
   @Getter
   @Setter
   public static class AuthCorpInfo implements Serializable {
@@ -148,6 +157,9 @@ public class WxCpTpPermanentCodeInfo extends WxCpBaseResp {
 
   }
 
+  /**
+   * The type Agent.
+   */
   @Getter
   @Setter
   public static class Agent implements Serializable {
@@ -280,6 +292,34 @@ public class WxCpTpPermanentCodeInfo extends WxCpBaseResp {
   }
 
   /**
+   * 推广二维码安装相关信息
+   */
+  @Getter
+  @Setter
+  public static class RegisterCodeInfo implements Serializable {
+    private static final long serialVersionUID = -5028321625140879571L;
+
+    /**
+     * 注册码
+     */
+    @SerializedName("register_code")
+    private String registerCode;
+
+    /**
+     * 推广包ID
+     */
+    @SerializedName("template_id")
+    private String templateId;
+
+    /**
+     * 仅当获取注册码指定该字段时才返回
+     */
+    @SerializedName("state")
+    private String state;
+
+  }
+
+  /**
    * 应用对应的权限
    */
   @Getter
@@ -319,6 +359,12 @@ public class WxCpTpPermanentCodeInfo extends WxCpBaseResp {
 
   }
 
+  /**
+   * From json wx cp tp permanent code info.
+   *
+   * @param json the json
+   * @return the wx cp tp permanent code info
+   */
   public static WxCpTpPermanentCodeInfo fromJson(String json) {
     return WxCpGsonBuilder.create().fromJson(json, WxCpTpPermanentCodeInfo.class);
   }

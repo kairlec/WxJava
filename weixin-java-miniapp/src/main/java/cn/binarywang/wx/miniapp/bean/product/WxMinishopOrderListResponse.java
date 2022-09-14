@@ -7,11 +7,11 @@ import lombok.Data;
 
 /**
  * @author leiin
- * @date 2022/6/20 7:09 下午
+ * created on  2022/6/20 7:09 下午
  */
 @Data
 public class WxMinishopOrderListResponse extends WxMaShopBaseResponse {
-  private List<WxMinishopOrderDetail> orders;
+  private List<WxMinishopOrderResult> orders;
   @SerializedName("total_num")
   private Long totalNum;
 }

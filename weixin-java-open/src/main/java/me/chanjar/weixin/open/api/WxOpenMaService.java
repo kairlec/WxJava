@@ -18,7 +18,7 @@ import java.util.Map;
  * </pre>
  *
  * @author yqx
- * @date 2018 /9/12
+ * created on  2018 /9/12
  */
 public interface WxOpenMaService extends WxMaService {
   /**
@@ -250,6 +250,11 @@ public interface WxOpenMaService extends WxMaService {
    * 小程序管理-解除已关联的小程序
    */
   String API_WX_AMP_LINK_UN = "https://api.weixin.qq.com/cgi-bin/wxopen/wxampunlink";
+
+  /**
+   * 小程序管理-查询小程序版本信息
+   */
+  String API_GET_VERSION_INFO = "https://api.weixin.qq.com/wxa/getversioninfo";
 
   /**
    * 获得小程序的域名配置信息
@@ -701,5 +706,13 @@ public interface WxOpenMaService extends WxMaService {
    * @return 响应结果
    */
   WxOpenResult wxAmpUnLink(String appid) throws WxErrorException;
+
+  /**
+   * 查询小程序版本信息
+   *
+   * @return the wx open result
+   * @throws WxErrorException the wx error exception
+   */
+  WxOpenVersioninfoResult getVersionInfo() throws WxErrorException;
 
 }

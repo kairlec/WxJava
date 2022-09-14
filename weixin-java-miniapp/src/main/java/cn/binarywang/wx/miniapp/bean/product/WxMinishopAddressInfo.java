@@ -5,7 +5,7 @@ import lombok.Data;
 
 /**
  * @author leiin
- * @date 2022/6/20 7:32 下午
+ * created on  2022/6/20 7:32 下午
  */
 @Data
 public class WxMinishopAddressInfo {
@@ -16,7 +16,7 @@ public class WxMinishopAddressInfo {
   @SerializedName("province_name")
   private String provinceName;
   @SerializedName("city_name")
-  private String cityame;
+  private String cityName;
   @SerializedName("county_name")
   private String countyName;
   @SerializedName("detail_info")

@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author <a href="https://github.com/007gzs">007</a>
  * @author yqx
- * @date 2018-09-12
+ * created on  2018-09-12
  */
 public class WxOpenMaServiceImpl extends WxMaServiceImpl implements WxOpenMaService {
   private final WxOpenComponentService wxOpenComponentService;
@@ -438,5 +438,12 @@ public class WxOpenMaServiceImpl extends WxMaServiceImpl implements WxOpenMaServ
       }
     }
     return jsonArray;
+  }
+
+  @Override
+  public WxOpenVersioninfoResult getVersionInfo() throws WxErrorException {
+    JsonObject params = new JsonObject();
+    String response = post(API_GET_VERSION_INFO, GSON.toJson(params));
+    return WxMaGsonBuilder.create().fromJson(response, WxOpenVersioninfoResult.class);
   }
 }
