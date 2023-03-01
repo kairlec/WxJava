@@ -4,7 +4,7 @@
 [![Github](https://img.shields.io/github/stars/Wechat-Group/WxJava?logo=github&style=flat)](https://github.com/Wechat-Group/WxJava)
 [![GitHub release](https://img.shields.io/github/release/Wechat-Group/WxJava.svg)](https://github.com/Wechat-Group/WxJava/releases)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.binarywang/wx-java.svg)](http://mvnrepository.com/artifact/com.github.binarywang/wx-java)
-[![Build Status](https://app.travis-ci.com/Wechat-Group/WxJava.svg?branch=develop)](https://app.travis-ci.com/github/Wechat-Group/WxJava)
+[![Build Status](https://img.shields.io/circleci/project/github/Wechat-Group/WxJava/develop.svg?sanitize=true)](https://circleci.com/gh/Wechat-Group/WxJava/tree/develop)
 [![使用IntelliJ IDEA开发维护](https://img.shields.io/badge/IntelliJ%20IDEA-支持-blue.svg)](https://www.jetbrains.com/?from=WxJava-weixin-java-tools)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
@@ -17,7 +17,7 @@
   <tr>
     <td align="center" valign="middle" colspan="3">
       <a href="http://www.ccflow.org/?from=wxjava" target="_blank">
-        <img height="120" src="http://binary.ac.cn/images/banners/ccflow.png" alt="">
+        <img height="120" src="https://ccfast.cc/AD/ccflow2.png" alt="ccflow">
       </a>
     </td>
   </tr>
@@ -31,17 +31,17 @@
   <tr>
     <td align="left" valign="middle">
       <a href="http://mp.weixin.qq.com/mp/homepage?__biz=MzI3MzAwMzk4OA==&hid=1&sn=f31af3bf562b116b061c9ab4edf70b61&scene=18#wechat_redirect" target="_blank">
-        <img height="120" src="http://binary.ac.cn/images/qrcodes/mp.png" alt="">
+        <img height="120" src="https://gitee.com/public-res/wx-java-images/raw/main/qrcodes/mp.png" alt="mp qrcode">
       </a>
     </td>
     <td valign="middle">
       <a href="https://www.diboot.com/" target="_blank">
-        <img height="120" src="http://binary.ac.cn/images/banners/diboot.png" alt="diboot低代码开发平台"/>
+        <img height="120" src="https://gitee.com/public-res/wx-java-images/raw/main/banners/diboot.png" alt="diboot低代码开发平台"/>
       </a>
     </td>
     <td align="right" valign="middle">
       <a href="https://promotion.aliyun.com/ntms/act/qwbk.html?userCode=7makzf5h" target="_blank">
-        <img height="120" src="http://binary.ac.cn/images/banners/aliyun.jpg" alt="">
+        <img height="120" src="https://gitee.com/public-res/wx-java-images/raw/main/banners/aliyun.jpg" alt="aliyun ad">
       </a>
     </td>
   </tr>

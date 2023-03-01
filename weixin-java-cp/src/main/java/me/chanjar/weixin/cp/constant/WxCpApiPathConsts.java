@@ -84,6 +84,12 @@ public interface WxCpApiPathConsts {
      */
     String EXTERNAL_CONTACT_MESSAGE_SEND = "/cgi-bin/externalcontact/message/send";
 
+    /**
+     * 撤回应用消息
+     * https://developer.work.weixin.qq.com/document/path/94867
+     */
+    String MESSAGE_RECALL = "/cgi-bin/message/recall";
+
   }
 
   /**
@@ -284,6 +290,14 @@ public interface WxCpApiPathConsts {
      */
     String GET_TEMPLATE_DETAIL = "/cgi-bin/oa/gettemplatedetail";
     /**
+     * The constant CREATE_TEMPLATE.
+     */
+    String CREATE_TEMPLATE = "/cgi-bin/oa/approval/create_template";
+    /**
+     * The constant CREATE_TEMPLATE.
+     */
+    String UPDATE_TEMPLATE = "/cgi-bin/oa/approval/update_template";
+    /**
      * The constant APPLY_EVENT.
      */
     String APPLY_EVENT = "/cgi-bin/oa/applyevent";
@@ -360,6 +374,28 @@ public interface WxCpApiPathConsts {
 
     /**
      * 会议
+     * https://developer.work.weixin.qq.com/document/path/93626
+     */
+    String MEETING_ADD = "/cgi-bin/meeting/create";
+    /**
+     * The constant MEETING_UPDATE.
+     */
+    String MEETING_UPDATE = "/cgi-bin/meeting/update";
+    /**
+     * The constant MEETING_CANCEL.
+     */
+    String MEETING_CANCEL = "/cgi-bin/meeting/cancel";
+    /**
+     * The constant MEETING_DETAIL.
+     */
+    String MEETING_DETAIL = "/cgi-bin/meeting/get_info";
+    /**
+     * The constant GET_USER_MEETING_ID.
+     */
+    String GET_USER_MEETING_ID = "/cgi-bin/meeting/get_user_meetingid";
+
+    /**
+     * 会议室
      * https://developer.work.weixin.qq.com/document/path/93624
      */
     String MEETINGROOM_ADD = "/cgi-bin/oa/meetingroom/add";
@@ -775,6 +811,11 @@ public interface WxCpApiPathConsts {
      */
     String GET_LOGIN_INFO = "/cgi-bin/service/get_login_info";
 
+    /**
+     * The constant GET_CUSTOMIZED_AUTH_URL.
+     */
+    String GET_CUSTOMIZED_AUTH_URL = "/cgi-bin/service/get_customized_auth_url";
+
 
     /**
      * The constant CONTACT_SEARCH.
@@ -784,6 +825,15 @@ public interface WxCpApiPathConsts {
      * The constant GET_ADMIN_LIST.
      */
     String GET_ADMIN_LIST = "/cgi-bin/service/get_admin_list";
+    /**
+     *  The constant GET_APP_QRCODE.
+     */
+    String GET_APP_QRCODE = "/cgi-bin/service/get_app_qrcode";
+
+    /**
+     *  The constant CORPID_TO_OPENCORPID.
+     */
+    String CORPID_TO_OPENCORPID = "/cgi-bin/service/corpid_to_opencorpid";
 
     /**
      * The constant GET_ORDER.
@@ -931,6 +981,10 @@ public interface WxCpApiPathConsts {
      * The constant USERID_TO_OPEN_USERID.
      */
     String USERID_TO_OPEN_USERID = "/cgi-bin/batch/userid_to_openuserid";
+    /**
+     * The constant OPEN_USERID_TO_USERID.
+     */
+    String OPEN_USERID_TO_USERID = "/cgi-bin/batch/openuserid_to_userid";
 
     /**
      * The constant USER_LIST_ID.
@@ -991,11 +1045,15 @@ public interface WxCpApiPathConsts {
     /**
      * The constant GET_NEW_EXTERNAL_USERID.
      */
-    String GET_NEW_EXTERNAL_USERID = "/cgi-bin/service/externalcontact/get_new_external_userid";
+    String GET_NEW_EXTERNAL_USERID = "/cgi-bin/externalcontact/get_new_external_userid";
     /**
      * The constant TO_SERVICE_EXTERNAL_USERID.
      */
     String TO_SERVICE_EXTERNAL_USERID = "/cgi-bin/externalcontact/to_service_external_userid";
+    /**
+     * The constant FROM_SERVICE_EXTERNAL_USERID.
+     */
+    String FROM_SERVICE_EXTERNAL_USERID = "/cgi-bin/externalcontact/from_service_external_userid";
     /**
      * The constant FINISH_EXTERNAL_USERID_MIGRATION.
      */
@@ -1054,6 +1112,10 @@ public interface WxCpApiPathConsts {
      * The constant GROUP_CHAT_TRANSFER.
      */
     String GROUP_CHAT_TRANSFER = "/cgi-bin/externalcontact/groupchat/transfer";
+    /**
+     * The constant GROUP_CHAT_ONJOB_TRANSFER.
+     */
+    String GROUP_CHAT_ONJOB_TRANSFER = "/cgi-bin/externalcontact/groupchat/onjob_transfer";
     /**
      * The constant LIST_USER_BEHAVIOR_DATA.
      */
