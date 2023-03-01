@@ -2,7 +2,6 @@ package me.chanjar.weixin.cp.api;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.common.util.XmlUtils;
 import me.chanjar.weixin.common.util.json.GsonParser;

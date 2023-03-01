@@ -2,7 +2,6 @@ package me.chanjar.weixin.cp.api;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import me.chanjar.weixin.cp.api.impl.WxCpServiceImpl;
 import me.chanjar.weixin.cp.bean.WxCpBaseResp;
 import me.chanjar.weixin.cp.bean.oa.wedrive.*;
