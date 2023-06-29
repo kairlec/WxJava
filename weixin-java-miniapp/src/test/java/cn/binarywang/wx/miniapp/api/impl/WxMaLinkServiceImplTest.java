@@ -12,6 +12,9 @@ import me.chanjar.weixin.common.error.WxErrorException;
 import org.testng.annotations.Guice;
 import org.testng.annotations.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 @Test
 @Guice(modules = ApiTestModule.class)
 @Slf4j
@@ -23,6 +26,7 @@ public class WxMaLinkServiceImplTest {
   public void testGenerateUrlLink() throws WxErrorException {
     String url = this.wxMaService.getLinkService().generateUrlLink(GenerateUrlLinkRequest.builder()
       .path("pages/tabBar/home/home")
+      .expireTime(LocalDateTime.now().plusDays(5).atZone(ZoneId.systemDefault()).toEpochSecond()) //增加有效期，此行可注释
       .build());
 
     System.out.println(url);

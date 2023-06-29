@@ -4,6 +4,7 @@ import cn.binarywang.wx.miniapp.api.*;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.util.WxMaConfigHolder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -174,7 +175,13 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
           return this.getWxMaConfig().getAccessToken();
         }
       } while (!locked);
-      String response = doGetAccessTokenRequest();
+
+      String response;
+      if (getWxMaConfig().isStableAccessToken()) {
+        response = doGetStableAccessTokenRequest(forceRefresh);
+      } else {
+        response = doGetAccessTokenRequest();
+      }
       return extractAccessToken(response);
     } catch (IOException | InterruptedException e) {
       throw new WxRuntimeException(e);
@@ -192,6 +199,15 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
    * @throws IOException .
    */
   protected abstract String doGetAccessTokenRequest() throws IOException;
+
+
+  /**
+   * 通过网络请求获取稳定版接口调用凭据
+   *
+   * @return .
+   * @throws IOException .
+   */
+  protected abstract String doGetStableAccessTokenRequest(boolean forceRefresh) throws IOException;
 
   @Override
   public String get(String url, String queryParam) throws WxErrorException {
@@ -324,7 +340,7 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
       throw new WxErrorException(error);
     }
     WxAccessToken accessToken = WxAccessToken.fromJson(resultContent);
-    config.updateAccessToken(accessToken.getAccessToken(), accessToken.getExpiresIn());
+    config.updateAccessTokenProcessor(accessToken.getAccessToken(), accessToken.getExpiresIn());
     return accessToken.getAccessToken();
   }
 
@@ -350,6 +366,7 @@ public abstract class BaseWxMaServiceImpl<H, P> implements WxMaService, RequestH
   }
 
   @Override
+  @JsonDeserialize
   public void setMultiConfigs(Map<String, WxMaConfig> configs, String defaultMiniappId) {
     this.configMap = Maps.newHashMap(configs);
     WxMaConfigHolder.set(defaultMiniappId);
