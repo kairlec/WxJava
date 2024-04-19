@@ -27,6 +27,7 @@ import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
+import java.util.Optional;
 
 /**
  * 微信支付配置
@@ -166,6 +167,11 @@ public class WxPayConfig {
 
   private CloseableHttpClient apiV3HttpClient;
   /**
+   * 支持扩展httpClientBuilder
+   */
+  private HttpClientBuilderCustomizer httpClientBuilderCustomizer;
+  private HttpClientBuilderCustomizer apiV3HttpClientBuilderCustomizer;
+  /**
    * 私钥信息
    */
   private PrivateKey privateKey;
@@ -262,12 +268,12 @@ public class WxPayConfig {
 
     InputStream keyInputStream = this.loadConfigInputStream(this.getPrivateKeyString(), this.getPrivateKeyPath(),
       this.privateKeyContent, "privateKeyPath");
-    InputStream certInputStream = this.loadConfigInputStream(this.getPrivateCertString(), this.getPrivateCertPath(),
-      this.privateCertContent, "privateCertPath");
     try {
       PrivateKey merchantPrivateKey = PemUtils.loadPrivateKey(keyInputStream);
-      X509Certificate certificate = PemUtils.loadCertificate(certInputStream);
       if (StringUtils.isBlank(this.getCertSerialNo())) {
+        InputStream certInputStream = this.loadConfigInputStream(this.getPrivateCertString(), this.getPrivateCertPath(),
+          this.privateCertContent, "privateCertPath");
+        X509Certificate certificate = PemUtils.loadCertificate(certInputStream);
         this.certSerialNo = certificate.getSerialNumber().toString(16).toUpperCase();
       }
       //构造Http Proxy正向代理
@@ -283,6 +289,10 @@ public class WxPayConfig {
       //初始化V3接口正向代理设置
       HttpProxyUtils.initHttpProxy(wxPayV3HttpClientBuilder, wxPayHttpProxy);
 
+      // 提供自定义wxPayV3HttpClientBuilder的能力
+      Optional.ofNullable(apiV3HttpClientBuilderCustomizer).ifPresent(e -> {
+        e.customize(wxPayV3HttpClientBuilder);
+      });
       CloseableHttpClient httpClient = wxPayV3HttpClientBuilder.build();
 
       this.apiV3HttpClient = httpClient;
@@ -290,6 +300,8 @@ public class WxPayConfig {
       this.privateKey = merchantPrivateKey;
 
       return httpClient;
+    } catch (WxPayException e) {
+      throw e;
     } catch (Exception e) {
       throw new WxPayException("v3请求构造异常！", e);
     }

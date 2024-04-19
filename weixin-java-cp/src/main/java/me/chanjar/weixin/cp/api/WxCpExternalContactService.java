@@ -110,13 +110,13 @@ public interface WxCpExternalContactService {
    * 第三方应用调用时，返回的跟进人follow_user仅包含应用可见范围之内的成员。
    * </pre>
    *
-   * @param userId 外部联系人的userid
+   * @param externalUserId 外部联系人的userid
    * @return . external contact
    * @throws WxErrorException the wx error exception
    * @deprecated 建议使用 {@link #getContactDetail(String, String)}
    */
   @Deprecated
-  WxCpExternalContactInfo getExternalContact(String userId) throws WxErrorException;
+  WxCpExternalContactInfo getExternalContact(String externalUserId) throws WxErrorException;
 
   /**
    * 获取客户详情.
@@ -133,12 +133,12 @@ public interface WxCpExternalContactService {
    * 第三方/自建应用调用时，返回的跟进人follow_user仅包含应用可见范围之内的成员。
    * </pre>
    *
-   * @param userId 外部联系人的userid，注意不是企业成员的帐号
+   * @param externalUserId 外部联系人的userid，注意不是企业成员的帐号
    * @param cursor 用于分页查询的游标，字符串类型，由上一次调用返回，首次调用可不填
    * @return . contact detail
    * @throws WxErrorException .
    */
-  WxCpExternalContactInfo getContactDetail(String userId, String cursor) throws WxErrorException;
+  WxCpExternalContactInfo getContactDetail(String externalUserId, String cursor) throws WxErrorException;
 
   /**
    * 企业和服务商可通过此接口，将微信外部联系人的userid转为微信openid，用于调用支付相关接口。暂不支持企业微信外部联系人（ExternalUserid为wo开头）的userid转openid。
@@ -689,6 +689,39 @@ public interface WxCpExternalContactService {
    * @throws WxErrorException the wx error exception
    */
   WxCpMsgTemplateAddResult addMsgTemplate(WxCpMsgTemplate wxCpMsgTemplate) throws WxErrorException;
+
+
+  /**
+   * 提醒成员群发
+   * 企业和第三方应用可调用此接口，重新触发群发通知，提醒成员完成群发任务，24小时内每个群发最多触发三次提醒。
+   * <p>
+   * 请求方式: POST(HTTPS)
+   * <p>
+   * 请求地址:https://qyapi.weixin.qq.com/cgi-bin/externalcontact/remind_groupmsg_send?access_token=ACCESS_TOKEN
+   * <p>
+   * <a href="https://developer.work.weixin.qq.com/document/path/97610">文档地址</a>
+   *
+   * @param msgId 群发消息的id，通过获取群发记录列表接口返回
+   * @return the wx cp msg template add result
+   */
+  WxCpBaseResp remindGroupMsgSend(String msgId) throws WxErrorException;
+
+
+  /**
+   * 停止企业群发
+   * 企业和第三方应用可调用此接口，停止无需成员继续发送的企业群发
+   * <p>
+   * 请求方式: POST(HTTPS)
+   * <p>
+   * 请求地址:https://qyapi.weixin.qq.com/cgi-bin/externalcontact/cancel_groupmsg_send?access_token=ACCESS_TOKEN
+   * <p>
+   * <a href="https://developer.work.weixin.qq.com/document/path/97611">文档地址</a>
+   *
+   * @param msgId 群发消息的id，通过获取群发记录列表接口返回
+   * @return the wx cp msg template add result
+   */
+  WxCpBaseResp cancelGroupMsgSend(String msgId) throws WxErrorException;
+
 
   /**
    * 发送新客户欢迎语

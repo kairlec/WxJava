@@ -101,14 +101,14 @@ public class WxCpExternalContactServiceImpl implements WxCpExternalContactServic
   }
 
   @Override
-  public WxCpExternalContactInfo getExternalContact(String userId) throws WxErrorException {
-    final String url = this.mainService.getWxCpConfigStorage().getApiUrl(GET_EXTERNAL_CONTACT + userId);
+  public WxCpExternalContactInfo getExternalContact(String externalUserId) throws WxErrorException {
+    final String url = this.mainService.getWxCpConfigStorage().getApiUrl(GET_EXTERNAL_CONTACT + externalUserId);
     return WxCpExternalContactInfo.fromJson(this.mainService.get(url, null));
   }
 
   @Override
-  public WxCpExternalContactInfo getContactDetail(String userId, String cursor) throws WxErrorException {
-    String params = userId;
+  public WxCpExternalContactInfo getContactDetail(String externalUserId, String cursor) throws WxErrorException {
+    String params = externalUserId;
     if (StringUtils.isNotEmpty(cursor)) {
       params = params + "&cursor=" + cursor;
     }
@@ -416,6 +416,24 @@ public class WxCpExternalContactServiceImpl implements WxCpExternalContactServic
   public WxCpMsgTemplateAddResult addMsgTemplate(WxCpMsgTemplate wxCpMsgTemplate) throws WxErrorException {
     final String url = this.mainService.getWxCpConfigStorage().getApiUrl(ADD_MSG_TEMPLATE);
     return WxCpMsgTemplateAddResult.fromJson(this.mainService.post(url, wxCpMsgTemplate.toJson()));
+  }
+
+  @Override
+  public WxCpBaseResp remindGroupMsgSend(String msgId) throws WxErrorException {
+    JsonObject params = new JsonObject();
+    params.addProperty("msgid", msgId);
+    final String url = this.mainService.getWxCpConfigStorage()
+                                       .getApiUrl(REMIND_GROUP_MSG_SEND);
+    return WxCpBaseResp.fromJson(this.mainService.post(url, params.toString()));
+  }
+
+  @Override
+  public WxCpBaseResp cancelGroupMsgSend(String msgId) throws WxErrorException {
+    JsonObject params = new JsonObject();
+    params.addProperty("msgid", msgId);
+    final String url = this.mainService.getWxCpConfigStorage()
+                                       .getApiUrl(CANCEL_GROUP_MSG_SEND);
+    return WxCpBaseResp.fromJson(this.mainService.post(url, params.toString()));
   }
 
   @Override

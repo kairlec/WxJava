@@ -10,7 +10,6 @@ import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayNativeOrderResult;
 import com.github.binarywang.wxpay.bean.request.*;
 import com.github.binarywang.wxpay.bean.result.*;
-import com.github.binarywang.wxpay.bean.result.enums.PartnerTradeTypeEnum;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.config.WxPayConfigHolder;
@@ -76,9 +75,6 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
   private final ProfitSharingService profitSharingService = new ProfitSharingServiceImpl(this);
 
   @Getter
-  private final ProfitSharingV3Service profitSharingV3Service = new ProfitSharingV3ServiceImpl(this);
-
-  @Getter
   private final RedpackService redpackService = new RedpackServiceImpl(this);
 
   @Getter
@@ -129,7 +125,7 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
   @Getter
   private final BrandMerchantTransferService brandMerchantTransferService = new BrandMerchantTransferServiceImpl(this);
 
-  protected Map<String, WxPayConfig> configMap;
+  protected Map<String, WxPayConfig> configMap = new HashMap<>();
 
   @Override
   public WxPayConfig getConfig() {
@@ -210,9 +206,11 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
   @Override
   public String getPayBaseUrl() {
     if (this.getConfig().isUseSandboxEnv()) {
+      if (StringUtils.isNotBlank(this.getConfig().getApiV3Key())) {
+        throw new WxRuntimeException("微信支付V3 目前不支持沙箱模式！");
+      }
       return this.getConfig().getPayBaseUrl() + "/xdc/apiv2sandbox";
     }
-
     return this.getConfig().getPayBaseUrl();
   }
 
@@ -293,6 +291,13 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
   @Override
   public WxPayRefundQueryV3Result refundQueryV3(WxPayRefundQueryV3Request request) throws WxPayException {
     String url = String.format("%s/v3/refund/domestic/refunds/%s", this.getPayBaseUrl(), request.getOutRefundNo());
+    String response = this.getV3(url);
+    return GSON.fromJson(response, WxPayRefundQueryV3Result.class);
+  }
+
+  @Override
+  public WxPayRefundQueryV3Result refundPartnerQueryV3(WxPayRefundQueryV3Request request) throws WxPayException {
+    String url = String.format("%s/v3/refund/domestic/refunds/%s?sub_mchid=%s", this.getPayBaseUrl(), request.getOutRefundNo(),request.getSubMchid());
     String response = this.getV3(url);
     return GSON.fromJson(response, WxPayRefundQueryV3Result.class);
   }
@@ -712,15 +717,15 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
   }
 
   @Override
-  public <T> T createPartnerOrderV3(PartnerTradeTypeEnum tradeType, WxPayPartnerUnifiedOrderV3Request request) throws WxPayException {
+  public <T> T createPartnerOrderV3(TradeTypeEnum tradeType, WxPayPartnerUnifiedOrderV3Request request) throws WxPayException {
     WxPayUnifiedOrderV3Result result = this.unifiedPartnerOrderV3(tradeType, request);
     //获取应用ID
     String appId = StringUtils.isBlank(request.getSubAppid()) ? request.getSpAppid() : request.getSubAppid();
-    return result.getPayInfo(tradeType.getDirectConnTrade(), appId, request.getSubMchId(), this.getConfig().getPrivateKey());
+    return result.getPayInfo(tradeType, appId, request.getSubMchId(), this.getConfig().getPrivateKey());
   }
 
   @Override
-  public WxPayUnifiedOrderV3Result unifiedPartnerOrderV3(PartnerTradeTypeEnum tradeType, WxPayPartnerUnifiedOrderV3Request request) throws WxPayException {
+  public WxPayUnifiedOrderV3Result unifiedPartnerOrderV3(TradeTypeEnum tradeType, WxPayPartnerUnifiedOrderV3Request request) throws WxPayException {
     if (StringUtils.isBlank(request.getSpAppid())) {
       request.setSpAppid(this.getConfig().getAppId());
     }
@@ -741,7 +746,7 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
       request.setSubMchId(this.getConfig().getSubMchId());
     }
 
-    String url = this.getPayBaseUrl() + tradeType.getPartnerUrl();
+    String url = this.getPayBaseUrl() + tradeType.getBasePartnerUrl();
     String response = this.postV3(url, GSON.toJson(request));
     return GSON.fromJson(response, WxPayUnifiedOrderV3Result.class);
   }
@@ -832,7 +837,7 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
   }
 
   @Override
-  public byte[] createScanPayQrcodeMode1(String productId, File logoFile, Integer sideLength) {
+  public byte[] createScanPayQrcodeMode1(String productId, File logoFile, Integer sideLength) throws Exception {
     String content = this.createScanPayQrcodeMode1(productId);
     return this.createQrcode(content, logoFile, sideLength);
   }
@@ -862,11 +867,11 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
   }
 
   @Override
-  public byte[] createScanPayQrcodeMode2(String codeUrl, File logoFile, Integer sideLength) {
+  public byte[] createScanPayQrcodeMode2(String codeUrl, File logoFile, Integer sideLength) throws Exception {
     return this.createQrcode(codeUrl, logoFile, sideLength);
   }
 
-  private byte[] createQrcode(String content, File logoFile, Integer sideLength) {
+  private byte[] createQrcode(String content, File logoFile, Integer sideLength) throws Exception {
     if (sideLength == null || sideLength < 1) {
       return QrcodeUtils.createQrcode(content, logoFile);
     }
@@ -1094,9 +1099,9 @@ public abstract class BaseWxPayServiceImpl implements WxPayService {
   public WxPayApplyBillV3Result applyFundFlowBill(WxPayApplyFundFlowBillV3Request request) throws WxPayException {
     String url;
     if (StringUtils.isBlank(request.getTarType())) {
-      url = String.format("%s/v3/bill/fundflowbill?bill_date=%s&bill_type=%s", this.getPayBaseUrl(), request.getBillDate(), request.getAccountType());
+      url = String.format("%s/v3/bill/fundflowbill?bill_date=%s&account_type=%s", this.getPayBaseUrl(), request.getBillDate(), request.getAccountType());
     } else {
-      url = String.format("%s/v3/bill/fundflowbill?bill_date=%s&bill_type=%s&tar_type=%s", this.getPayBaseUrl(), request.getBillDate(), request.getAccountType(), request.getTarType());
+      url = String.format("%s/v3/bill/fundflowbill?bill_date=%s&account_type=%s&tar_type=%s", this.getPayBaseUrl(), request.getBillDate(), request.getAccountType(), request.getTarType());
     }
     String response = this.getV3(url);
     return GSON.fromJson(response, WxPayApplyBillV3Result.class);

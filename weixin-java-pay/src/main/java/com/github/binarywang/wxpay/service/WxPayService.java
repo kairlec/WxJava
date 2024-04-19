@@ -5,14 +5,12 @@ import com.github.binarywang.wxpay.bean.coupon.*;
 import com.github.binarywang.wxpay.bean.notify.*;
 import com.github.binarywang.wxpay.bean.request.*;
 import com.github.binarywang.wxpay.bean.result.*;
-import com.github.binarywang.wxpay.bean.result.enums.PartnerTradeTypeEnum;
 import com.github.binarywang.wxpay.bean.result.enums.TradeTypeEnum;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.constant.WxPayConstants;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-
 import java.io.File;
 import java.io.InputStream;
 import java.util.Date;
@@ -242,19 +240,12 @@ public interface WxPayService {
   /**
    * 获取分账服务类.
    * <p>
-   * V3接口 {@link WxPayService#getProfitSharingV3Service()}
+   * V3接口 {@link WxPayService#getProfitSharingService()}
    * </p>
    *
    * @return the ent pay service
    */
   ProfitSharingService getProfitSharingService();
-
-  /**
-   * 获取V3分账服务类.
-   *
-   * @return the ent pay service
-   */
-  ProfitSharingV3Service getProfitSharingV3Service();
 
   /**
    * 获取支付分服务类.
@@ -641,7 +632,7 @@ public interface WxPayService {
    * @return 返回 {@link com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderV3Result}里的内部类或字段
    * @throws WxPayException the wx pay exception
    */
-  <T> T createPartnerOrderV3(PartnerTradeTypeEnum tradeType, WxPayPartnerUnifiedOrderV3Request request) throws WxPayException;
+  <T> T createPartnerOrderV3(TradeTypeEnum tradeType, WxPayPartnerUnifiedOrderV3Request request) throws WxPayException;
 
   /**
    * 在发起微信支付前，需要调用统一下单接口，获取"预支付交易会话标识"
@@ -649,8 +640,9 @@ public interface WxPayService {
    * @param tradeType the trade type
    * @param request   请求对象，注意一些参数如spAppid、spMchid等不用设置，方法内会自动从配置对象中获取到（前提是对应配置中已经设置）
    * @return the wx pay unified order result
+   * @throws WxPayException the wx pay exception
    */
-  WxPayUnifiedOrderV3Result unifiedPartnerOrderV3(PartnerTradeTypeEnum tradeType, WxPayPartnerUnifiedOrderV3Request request) throws WxPayException;
+  WxPayUnifiedOrderV3Result unifiedPartnerOrderV3(TradeTypeEnum tradeType, WxPayPartnerUnifiedOrderV3Request request) throws WxPayException;
 
   /**
    * 在发起微信支付前，需要调用统一下单接口，获取"预支付交易会话标识"
@@ -869,7 +861,7 @@ public interface WxPayService {
 
   /**
    * <pre>
-   * 微信支付-查询退款
+   * 微信支付-查询退款-直连商户
    * 应用场景：
    *  提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，建议在提交退款申请后1分钟发起查询退款状态，一般来说零钱支付的退款5分钟内到账，银行卡支付的退款1-3个工作日到账。
    *  详见 <a href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_10.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_10.shtml</a>
@@ -881,6 +873,21 @@ public interface WxPayService {
    * @throws WxPayException the wx pay exception
    */
   WxPayRefundQueryV3Result refundQueryV3(WxPayRefundQueryV3Request request) throws WxPayException;
+
+  /**
+   * <pre>
+   * 微信支付-查询退款-服务商
+   * 应用场景：
+   *  提交退款申请后，通过调用该接口查询退款状态。退款有一定延时，建议在提交退款申请后1分钟发起查询退款状态，一般来说零钱支付的退款5分钟内到账，银行卡支付的退款1-3个工作日到账。
+   *  详见 <a href="https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter4_1_10.shtml">https://pay.weixin.qq.com/wiki/doc/apiv3_partner/apis/chapter4_1_10.shtml</a>
+   * 接口链接：https://api.mch.weixin.qq.com/v3/refund/domestic/refunds/{out_refund_no}?sub_mchid={sub_mchid}
+   * </pre>
+   *
+   * @param request 微信退款单号
+   * @return 退款信息 wx pay refund query result
+   * @throws WxPayException the wx pay exception
+   */
+  WxPayRefundQueryV3Result refundPartnerQueryV3(WxPayRefundQueryV3Request request) throws WxPayException;
 
   /**
    * 解析支付结果通知.
@@ -1018,7 +1025,7 @@ public interface WxPayService {
    * @param sideLength 要生成的二维码的边长，如果为空，则取默认值400
    * @return 生成的二维码的字节数组 byte [ ]
    */
-  byte[] createScanPayQrcodeMode1(String productId, File logoFile, Integer sideLength);
+  byte[] createScanPayQrcodeMode1(String productId, File logoFile, Integer sideLength) throws Exception;
 
   /**
    * <pre>
@@ -1047,7 +1054,7 @@ public interface WxPayService {
    * @param sideLength 要生成的二维码的边长，如果为空，则取默认值400
    * @return 生成的二维码的字节数组 byte [ ]
    */
-  byte[] createScanPayQrcodeMode2(String codeUrl, File logoFile, Integer sideLength);
+  byte[] createScanPayQrcodeMode2(String codeUrl, File logoFile, Integer sideLength) throws Exception;
 
   /**
    * <pre>
